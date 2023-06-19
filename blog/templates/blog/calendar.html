@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calendar</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      text-align: center;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    td {
+      border: 1px solid #ddd;
+    }
+
+    .today {
+      background-color: #ffffcc;
+    }
+  </style>
+</head>
+<body>
+<nav>
+    <a role="button"
+       class="btn btn-primary float-left"
+       href="/blog/calendar/{{ previous_year }}/{{ previous_month }}/">
+        지난 달
+    </a>
+    <a role="button"
+       class="btn btn-primary float-right"
+       href="/blog/calendar/{{next_year }}/{{ next_month }}/">
+        다음 달
+    </a>
+</nav>
+  <h2>Calendar</h2>
+  {{ calendar_html|safe }}
+</body>
+</html>
