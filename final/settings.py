@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'markdownx',
     'blog',
+    'single_pages',
 ]
 
 MIDDLEWARE = [
