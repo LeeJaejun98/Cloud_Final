@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Post, Category, Tag
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import CommentForm
@@ -9,7 +10,7 @@ from datetime import datetime
 
 
 class MyHtmlCalendar(calendar.HTMLCalendar):
-    def formatday(self, day, weekday):
+    def myformatday(self, day, weekday, theyear, themonth):
         """
         Return a day as a table cell.
         """
@@ -17,7 +18,35 @@ class MyHtmlCalendar(calendar.HTMLCalendar):
             # day outside month
             return '<td class="%s">&nbsp;</td>' % self.cssclass_noday
         else:
-            return '<td class="%s"><a href="/blog/%s/">%d</a></td>' % (self.cssclasses[weekday], day, day)
+            return '<td class="%s"><a href="/blog/search/%s/%s/%s">%d</a></td>' % \
+                (self.cssclasses[weekday], themonth, theyear, day, day)
+
+    def myformatweek(self, theweek, theyear, themonth):
+        """
+        Return a complete week as a table row.
+        """
+        s = ''.join(self.myformatday(d, wd, theyear, themonth) for (d, wd) in theweek)
+        return '<tr>%s</tr>' % s
+
+    def formatmonth(self, theyear, themonth, withyear=True):
+        """
+        Return a formatted month as a table.
+        """
+        v = []
+        a = v.append
+        a('<table border="0" cellpadding="0" cellspacing="0" class="%s">' % (
+            self.cssclass_month))
+        a('\n')
+        a(self.formatmonthname(theyear, themonth, withyear=withyear))
+        a('\n')
+        a(self.formatweekheader())
+        a('\n')
+        for week in self.monthdays2calendar(theyear, themonth):
+            a(self.myformatweek(week, theyear, themonth))
+            a('\n')
+        a('</table>')
+        a('\n')
+        return ''.join(v)
 
 
 def calendar_view(request):
@@ -88,12 +117,9 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
             raise PermissionError
 
 
-class PostCreate(LoginRequiredMixin, CreateView):  # 사용자에게 정보를 받아오는 페이지 + 페이지에 들어있는 홈의 정보 가져오기
+class PostCreate(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content', 'head_image', 'file_upload', 'category', 'tag']  # 7개만 받기
-
-    # def test_func(self):
-    #     return self.request.user.is_superuser or self.user.request.is_staff
+    fields = ['title', 'content', 'head_image', 'file_upload', 'category', 'tag']
 
     def get_context_data(self, **kwargs):
         context = super(PostCreate, self).get_context_data()
@@ -113,7 +139,7 @@ class PostCreate(LoginRequiredMixin, CreateView):  # 사용자에게 정보를 �
 
 class PostList(ListView):
     model = Post
-    ordering = '-pk'  # 내림차순으로 정렬해주기 위해
+    ordering = '-pk'
 
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data()
@@ -173,7 +199,7 @@ def add_comment(request, pk):
     if request.method == 'POST':
         post = Post.objects.get(pk=pk)
         comment_form = CommentForm(request.POST)
-        comment_temp = comment_form.save(commit=False) #바로 DB로 가는것을 막기 위해 commit 사용
+        comment_temp = comment_form.save(commit=False)
         comment_temp.post = post
         comment_temp.author = request.user
         comment_temp.save()
@@ -181,3 +207,13 @@ def add_comment(request, pk):
         return redirect(post.get_absolute_url())
     else:
         raise PermissionError
+
+
+def find_by_date(request, month, year, day):
+    post_list = Post.objects.filter(
+        Q(create_at__day=day) & Q(create_at__month=month) & Q(create_at__year=year)
+    ).order_by('-pk')
+
+    return render(request, 'blog/post_list.html', {
+        'post_list': post_list,
+    })

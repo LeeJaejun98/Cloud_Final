@@ -2,15 +2,16 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>메인페이지</title>
+    <title>홈페이지</title>
 </head>
 <body>
-<nav><a href="/blog/">BLOG</a></nav>
-    <h1>대문페이지</h1>
+<nav><a href="/blog/">일기장</a></nav>
+    <h1>홈페이지</h1>
 
     {% for post in recent_posts %}
         <div>
             <h4><a href="{{ post.get_absolute_url }}">{{ post.title }} by {{ post.author }}</a></h4>
+            <p>{{ post.head_image }}</p>
             <p>{{ post.content | truncatewords:30 }}</p>
         </div>
     {% endfor %}
