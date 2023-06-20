@@ -1,0 +1,35 @@
+{% extends 'music/base.html' %}
+{% block main_area %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <td>
+                순위
+            </td>
+            <td>
+                제목
+            </td>
+            <td>
+                아티스트
+            </td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for song in result %}
+            <tr>
+                <td>
+                    <p>{{ forloop.counter }}</p>
+                </td>
+                <td>
+                    <p><a href="{{ song.track.external_urls.spotify }}">{{ song.track.name }}</a></p>
+                </td>
+                <td>
+                    {% for n in song.track.artists %}
+                        <p style="display:inline">{{ n.name }}&nbsp;</p>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

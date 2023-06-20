@@ -1,0 +1,7 @@
+---
+applications:
+- name: jaejun-diary
+  buildpack: paketo-buildpacks/python
+  memory: 256M
+  instances: 1
+  command: waitress-serve --port=8080 final.wsgi:application

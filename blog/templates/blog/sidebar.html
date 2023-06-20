@@ -1,35 +1,32 @@
 <div class="col-md-4 col-lg-3">
     <!-- Search Widget -->
     <div class="card my-4">
-        <h5 class="card-header">카테고리로 일기 검색</h5>
+        <h5 class="card-header">제목으로 검색</h5>
         <div class="card-body">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
+                <input type="text" class="form-control" placeholder="Search for..." id="search-input">
                 <span class="input-group-btn">
-                                <button class="btn btn-secondary" type="button">Go!</button>
+                                <button class="btn btn-secondary" type="button" onclick="searchPost()">Go!</button>
                             </span>
             </div>
         </div>
     </div>
-
-    <!-- Categories Widget -->
-    <div class="card my-4">
-        <h5 class="card-header">카테고리</h5>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-6">
-                    <ul class="list-unstyled mb-0">
-                        {% for category in categories %}
-                        <li>
-                            <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
-                        </li>
-                        {% endfor %}
-                        <li>
-                            <a href="/blog/category/no-category">미분류({{ no_category_count }})</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
+<script>
+    function searchPost() {
+        let searchValue = document.getElementById('search-input').value.trim();
+        if (searchValue.length > 1){
+            location.href="/blog/search_title/" + searchValue + "/";
+        }
+        else {
+            alert('두 글자 이상의 검색어를 입력해주세요');
+        }
+    }
+
+    document.getElementById('search-input').addEventListener('keyup', function(event)
+    {
+        if(event.key === 'Enter') {
+            searchPost();
+        }
+    });
+</script>

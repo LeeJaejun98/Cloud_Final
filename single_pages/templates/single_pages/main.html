@@ -1,20 +1,51 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>홈페이지</title>
-</head>
-<body>
-<nav><a href="/blog/">일기장</a></nav>
-    <h1>홈페이지</h1>
-
-    {% for post in recent_posts %}
-        <div>
-            <h4><a href="{{ post.get_absolute_url }}">{{ post.title }} by {{ post.author }}</a></h4>
-            <p>{{ post.head_image }}</p>
-            <p>{{ post.content | truncatewords:30 }}</p>
-        </div>
-    {% endfor %}
-
-</body>
-</html>
+{% extends 'single_pages/base.html' %}
+{% block main_area %}
+    <h2>Calendar</h2>
+    <br/>
+    <nav>
+        <a role="button"
+           class="btn btn-sm btn-primary float-left"
+           href="/{{ previous_year }}/{{ previous_month }}/">
+            지난 달
+        </a>
+        <a role="button"
+           class="btn btn-sm btn-primary float-right"
+           href="/{{ next_year }}/{{ next_month }}/">
+            다음 달
+        </a>
+    </nav>
+    <br/>
+    <br/>
+    <div>
+        {{ calendar_html | safe }}
+    </div>
+    <hr/>
+    <h3>일기장 최신글</h3>
+    <br>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <td>
+                제목
+            </td>
+            <td>
+                날짜
+            </td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for post in recent_posts %}
+            <tr>
+                <td>
+                    <a href="{{ post.get_absolute_url }}">
+                        {{ post.title }}
+                    </a>
+                </td>
+                <td>
+                    {{ post.create_at }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

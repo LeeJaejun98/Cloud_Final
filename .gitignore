@@ -162,3 +162,6 @@ cython_debug/
 migrations/
 
 _media/
+
+# secret keys
+secrets.json

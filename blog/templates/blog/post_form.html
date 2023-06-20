@@ -2,10 +2,14 @@
 {% load crispy_forms_tags %}
 
 {% block main_area %}
-    <h1>블로그 새 글 작성</h1>
+    <h1>새 일기 작성</h1>
     <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
     <table>
         {{ form | crispy }}
+        <tr>
+            <th><label for="id_tags_str">Tags:</label></th>
+            <td><input type="text" name="tags_str" id="id_tags_str"></td>
+        </tr>
     </table>
     <button type="submit" >글쓰기</button>
     </form>

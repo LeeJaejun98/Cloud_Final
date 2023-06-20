@@ -3,10 +3,33 @@
 {% load static %}
 {% load socialaccount %}
 <head>
-    <title>나만의 일기장</title>
+    <title>홈페이지</title>
     <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}" media="screen">
 
     <script src="https://kit.fontawesome.com/726bbd6862.js" crossorigin="anonymous"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            border: 1px solid #ddd;
+        }
+
+        .today {
+            background-color: #ffffcc;
+        }
+    </style>
 </head>
 
 <body>
@@ -42,12 +65,10 @@
 
 <div class="container my-3">
     <div class="row">
-        <div class="col-md-8 col-lg-9">
+        <div class="col-md-9 col-lg-9">
             {% block main_area %}
             {% endblock %}
-
         </div>
-
         {% include 'blog/sidebar.html' %}
     </div>
 </div>
