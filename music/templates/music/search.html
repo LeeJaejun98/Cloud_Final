@@ -1,0 +1,6 @@
+{% extends 'music/base.html' %}
+{% block main_area %}
+    <h1>{{ song_info.artist_name }} - {{ song_info.song_name }}</h1>
+    <hr/>
+    <a class="btn btn-primary" href="{{ song_info.url }}" target="_blank">노래 들으러 가기</a>
+{% endblock %}

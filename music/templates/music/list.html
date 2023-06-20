@@ -21,7 +21,7 @@
                     <p>{{ forloop.counter }}</p>
                 </td>
                 <td>
-                    <p><a href="{{ song.track.external_urls.spotify }}">{{ song.track.name }}</a></p>
+                    <p><a href="{{ song.track.external_urls.spotify }}" target="_blank">{{ song.track.name }}</a></p>
                 </td>
                 <td>
                     {% for n in song.track.artists %}
